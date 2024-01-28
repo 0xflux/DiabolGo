@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net"
 	"net/http"
 )
 
@@ -74,4 +75,35 @@ func intercept(res http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		log.Println("Error writing stream back to requester: ", err)
 	}
+}
+
+// handle TCP tunnelling
+func HandleTunnelling(w http.ResponseWriter, r *http.Request) {
+	destConn, err := net.Dial("tcp", r.Host)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusServiceUnavailable)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	hijacker, ok := w.(http.Hijacker)
+	if !ok {
+		http.Error(w, "Hijacking not supported", http.StatusInternalServerError)
+		return
+	}
+
+	clientConn, _, err := hijacker.Hijack()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusServiceUnavailable)
+		return
+	}
+
+	go transfer(destConn, clientConn)
+	go transfer(clientConn, destConn)
+}
+
+func transfer(destination io.WriteCloser, source io.ReadCloser) {
+	defer destination.Close()
+	defer source.Close()
+	io.Copy(destination, source)
 }
