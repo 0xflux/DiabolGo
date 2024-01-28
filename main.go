@@ -10,6 +10,10 @@ import (
 var webEntities = WebEntities{}
 
 func main() {
+	run()
+}
+
+func run() {
 	port := 1234
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -26,5 +30,6 @@ func main() {
 	fmt.Println("Starting listener on port: ", port)
 
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), nil))
+	// log.Fatal(http.ListenAndServeTLS(fmt.Sprintf(":%d", port), "cert.pem", "key.pem", nil))
 
 }

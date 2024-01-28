@@ -79,6 +79,8 @@ func intercept(res http.ResponseWriter, req *http.Request) {
 
 // handle TCP tunnelling
 func HandleTunnelling(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Println("Hello?")
 	destConn, err := net.Dial("tcp", r.Host)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusServiceUnavailable)

@@ -8,6 +8,13 @@ As this is only a POC this is not designed to operate on the network layer of a 
 
 I might build that in the future, but that's far more time consuming than building a POC.
 
+To configure HTTP proxy:
+
+1) Internet Options
+2) LAN Settings
+3) Use a proxy server for your LAN 
+4) Advanced (then only use HTTP)
+
 # Legal notice
 
 This project, including all associated source code and documentation, is developed and shared solely for educational, research, and defensive purposes in the field of cybersecurity. It is intended to be used exclusively by cybersecurity professionals, researchers, and educators to enhance understanding, develop defensive strategies, and improve security postures.
